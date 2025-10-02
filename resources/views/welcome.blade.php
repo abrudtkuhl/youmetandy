@@ -291,8 +291,7 @@
         <tr>
             <td align="center">
                 <p style="margin: 0; font-size: 11px; color: #000000;">
-                    © {{ date('Y') }} Andy Brudtkuhl. All rights reserved.<br>
-                    <em>Last updated: {{ $site['lastUpdated'] ?? date('F j, Y') }}</em> | 
+                    <em>Last updated: {{ $site['lastUpdated'] ?? date('F j, Y') }}</em> | Website by <a href="https://48web.com">48web</a>
                     <a href="#">Back to Top</a>
                 </p>
             </td>
