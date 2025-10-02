@@ -9,7 +9,7 @@
   "about": {
     "description": "I'm a web developer who's been working with computers since the early days of the internet. I got my start building websites with HTML and CSS back in the late 90s, and I've been hooked ever since!",
     "description2": "These days I work with modern technologies like PHP, Laravel, and JavaScript, but I still remember the good old days of table-based layouts and animated GIFs. I believe in writing clean, maintainable code and creating websites that are both functional and user-friendly.",
-    "skills": ["HTML", "CSS", "JavaScript", "PHP", "Laravel", "MySQL", "Linux", "Apache"]
+    "skills": ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "Apache", "Perl", "CGI", "Flash", "Dreamweaver", "Photoshop", "FTP", "SSH", "Linux", "Windows Server", "IIS", "ColdFusion", "ASP", "VBScript", "XML", "XHTML", "DHTML", "ActiveX"]
   },
   "projects": [
     {
