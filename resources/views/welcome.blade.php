@@ -287,6 +287,17 @@
 
     <br>
 
+    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
+        <tr>
+            <td>
+                <script src="https://public.tapback.dev/widget.js"></script>
+                <div data-widget-id="a6131de6-6b7e-4ba7-8dfc-f9ee2516e6b0" data-source="andybrudtkuhl" data-api-base="https://tapback.dev/api"></div>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
     <table width="100%" border="2" cellpadding="8" cellspacing="0" class="inset" bgcolor="#C0C0C0">
         <tr>
             <td align="center">
