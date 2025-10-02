@@ -9,20 +9,16 @@ class VisitorCounter
     
     public static function increment()
     {
-        // Try Redis first
         $count = self::getFromRedis();
         if ($count === null) {
-            // Fallback to session
             $count = self::getFromSession();
             if ($count === null) {
-                // Start with a 90s-style number
                 $count = 1337;
             }
         }
         
         $newCount = $count + 1;
         
-        // Save to both Redis and session
         self::saveToRedis($newCount);
         self::saveToSession($newCount);
         
@@ -31,31 +27,26 @@ class VisitorCounter
     
     public static function get()
     {
-        // Try Redis first
         $count = self::getFromRedis();
         if ($count !== null) {
             return $count;
         }
         
-        // Fallback to session
         $count = self::getFromSession();
         if ($count !== null) {
             return $count;
         }
         
-        // Fallback to random 90s-style number
         return rand(1337, 9999);
     }
     
     private static function getFromRedis()
     {
         try {
-            if (function_exists('redis')) {
-                $redis = redis();
-                return (int) $redis->get(self::$redisKey);
+            if (function_exists('cache') && config('cache.default') === 'redis') {
+                return (int) cache()->get(self::$redisKey);
             }
         } catch (\Exception $e) {
-            // Redis not available
         }
         return null;
     }
@@ -63,12 +54,10 @@ class VisitorCounter
     private static function saveToRedis($count)
     {
         try {
-            if (function_exists('redis')) {
-                $redis = redis();
-                $redis->set(self::$redisKey, $count);
+            if (function_exists('cache') && config('cache.default') === 'redis') {
+                cache()->put(self::$redisKey, $count, now()->addDays(30));
             }
         } catch (\Exception $e) {
-            // Redis not available
         }
     }
     
@@ -79,7 +68,6 @@ class VisitorCounter
                 return (int) session(self::$sessionKey);
             }
         } catch (\Exception $e) {
-            // Session not available
         }
         return null;
     }
@@ -89,27 +77,21 @@ class VisitorCounter
         try {
             session([self::$sessionKey => $count]);
         } catch (\Exception $e) {
-            // Session not available
         }
     }
     
     public static function reset()
     {
-        // Clear Redis
         try {
-            if (function_exists('redis')) {
-                $redis = redis();
-                $redis->del(self::$redisKey);
+            if (function_exists('cache') && config('cache.default') === 'redis') {
+                cache()->forget(self::$redisKey);
             }
         } catch (\Exception $e) {
-            // Redis not available
         }
         
-        // Clear session
         try {
             session()->forget(self::$sessionKey);
         } catch (\Exception $e) {
-            // Session not available
         }
         
         return self::increment();
