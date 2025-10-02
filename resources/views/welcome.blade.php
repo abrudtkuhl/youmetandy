@@ -1,13 +1,3 @@
-@php
-    use App\Helpers\SiteContent;
-    $site = SiteContent::get('site', []);
-    $about = SiteContent::get('about', []);
-    $projects = SiteContent::get('projects', []);
-    $writing = SiteContent::get('writing', []);
-    $links = SiteContent::get('links', []);
-    $contact = SiteContent::get('contact', []);
-    $visitorCount = SiteContent::incrementVisitorCount();
-@endphp
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -66,7 +56,6 @@
 </head>
 <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
     
-    <!-- Animated Header Banner -->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#000080">
         <tr>
             <td align="center">
@@ -79,7 +68,6 @@
 
     <br>
 
-    <!-- Main Header -->
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center">
@@ -97,7 +85,6 @@
         </tr>
     </table>
 
-    <!-- Navigation Menu -->
     <table width="100%" border="2" cellpadding="5" cellspacing="0" class="outset" bgcolor="#C0C0C0">
         <tr>
             <td align="center">
@@ -114,7 +101,6 @@
 
     <br>
 
-    <!-- Welcome Message with Construction Theme -->
     <table width="100%" border="2" cellpadding="10" cellspacing="0" class="inset" bgcolor="#F0F0F0">
         <tr>
             <td>
@@ -139,7 +125,6 @@
 
     <br>
 
-    <!-- About Me Section -->
     <a name="about"></a>
     <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
         <tr>
@@ -173,7 +158,6 @@
 
     <br>
 
-    <!-- Projects Section -->
     <a name="projects"></a>
     <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
         <tr>
@@ -222,7 +206,6 @@
 
     <br>
 
-    <!-- Writing Section -->
     <a name="writing"></a>
     <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
         <tr>
@@ -262,7 +245,6 @@
 
     <br>
 
-    <!-- Links Section -->
     <a name="links"></a>
     <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
         <tr>
@@ -285,7 +267,6 @@
 
     <br>
 
-    <!-- Contact Section -->
     <a name="contact"></a>
     <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
         <tr>
@@ -308,7 +289,6 @@
 
     <br>
 
-    <!-- Footer -->
     <table width="100%" border="2" cellpadding="8" cellspacing="0" class="inset" bgcolor="#C0C0C0">
         <tr>
             <td align="center">
@@ -321,7 +301,6 @@
         </tr>
     </table>
 
-    <!-- Visitor Counter (90s style) -->
     <table width="100%" border="0" cellpadding="3" cellspacing="0">
         <tr>
             <td align="center">
