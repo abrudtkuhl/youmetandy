@@ -182,7 +182,6 @@
                         @endif
                         <td width="50%" valign="top">
                             <h3 style="font-size: 14px; color: #000080; margin: 0 0 5px 0;">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="12" height="12" alt="*" style="display: inline-block;">
                                 {{ $project['emoji'] ?? '💻' }} {{ $project['title'] ?? 'Project' }}
                             </h3>
                             <p style="margin: 0 0 5px 0; line-height: 1.3; font-size: 12px;">
@@ -228,7 +227,6 @@
                         <tr>
                             <td width="100%" valign="top">
                                 <h3 style="font-size: 14px; color: #000080; margin: 0 0 3px 0;">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="12" height="12" alt="*" style="display: inline-block;">
                                     <a href="{{ $article['link'] ?? '#' }}">{{ $article['title'] ?? 'Article Title' }}</a>
                                 </h3>
                                 <p style="margin: 0 0 5px 0; line-height: 1.3; font-size: 12px;">
