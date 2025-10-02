@@ -41,4 +41,14 @@ class SiteContent
         $data = self::load();
         return data_get($data, $key, $default);
     }
+    
+    public static function getVisitorCount()
+    {
+        return VisitorCounter::get();
+    }
+    
+    public static function incrementVisitorCount()
+    {
+        return VisitorCounter::increment();
+    }
 }

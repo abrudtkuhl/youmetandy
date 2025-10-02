@@ -6,6 +6,7 @@
     $writing = SiteContent::get('writing', []);
     $links = SiteContent::get('links', []);
     $contact = SiteContent::get('contact', []);
+    $visitorCount = SiteContent::incrementVisitorCount();
 @endphp
 
 <!DOCTYPE html>
@@ -326,7 +327,7 @@
             <td align="center">
                 <p style="margin: 5px 0; font-size: 10px; color: #999999;">
                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" style="display: inline-block;">
-                    You are visitor number: <strong>{{ number_format($site['visitorCount'] ?? 1337) }}</strong> since January 1, 2024<br>
+                    You are visitor number: <strong>{{ number_format($visitorCount) }}</strong> since January 1, 2024<br>
                     <em>Best viewed in Netscape Navigator 4.0 or higher</em>
                 </p>
             </td>
