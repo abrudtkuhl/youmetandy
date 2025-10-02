@@ -9,11 +9,12 @@ class SiteContent
     public static function load()
     {
         if (self::$data === null) {
-            $jsonPath = storage_path('app/public/data/site-content.json');
+            $jsonPath = base_path('data/site-content.json');
             
             // Try multiple possible paths for production
             $possiblePaths = [
                 $jsonPath,
+                storage_path('app/public/data/site-content.json'),
                 public_path('storage/data/site-content.json'),
                 public_path('data/site-content.json'),
                 base_path('storage/app/public/data/site-content.json'),
