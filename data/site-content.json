@@ -36,7 +36,8 @@
       "emoji": "✍️",
       "description": "It's like grammarly for websites. I built an AI-powered proofreader that crawls websites and checks for spelling, grammar, and style issues and offers helpful suggestions for improvement.",
       "links": {
-        "view": "https://sitespellchecker.com"
+        "view": "https://sitespellchecker.com",
+        "blog": "https://brudtkuhl.com/blog/building-sitespellchecker"
       }
     },
     {
