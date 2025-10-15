@@ -52,4 +52,9 @@ class SiteContent
     {
         return VisitorCounter::increment();
     }
+    
+    public static function getWriting($limit = 10)
+    {
+        return RssFeedParser::getWriting($limit);
+    }
 }

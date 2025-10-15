@@ -228,10 +228,16 @@
                             <td width="100%" valign="top">
                                 <h3 style="font-size: 14px; color: #000080; margin: 0 0 3px 0;">
                                     <a href="{{ $article['link'] ?? '#' }}">{{ $article['title'] ?? 'Article Title' }}</a>
+                                    @if(isset($article['badge']))
+                                        <span class="{{ strtolower($article['badge']) == 'new!' ? 'new' : 'hot' }}">{{ $article['badge'] }}</span>
+                                    @endif
                                 </h3>
                                 <p style="margin: 0 0 5px 0; line-height: 1.3; font-size: 12px;">
                                     {{ $article['description'] ?? 'Article description coming soon!' }} 
                                     <em>Published {{ $article['date'] ?? 'Recently' }}</em>
+                                    @if(isset($article['source']))
+                                        <span style="color: #666666; font-size: 11px;">[{{ ucfirst($article['source']) }}]</span>
+                                    @endif
                                 </p>
                             </td>
                         </tr>
@@ -277,9 +283,9 @@
                     {{ $contact['message'] ?? 'I\'m always interested in new opportunities and exciting projects.' }}
                 </p>
                 <p style="margin: 0; line-height: 1.3; font-size: 13px;">
-                    <strong>Email:</strong> <a href="mailto:{{ $contact['email'] ?? 'hello@andybrudtkuhl.com' }}">{{ $contact['email'] ?? 'hello@andybrudtkuhl.com' }}</a><br>
-                    <strong>GitHub:</strong> <a href="{{ $contact['github'] ?? 'https://github.com/andybrudtkuhl' }}">{{ str_replace('https://', '', $contact['github'] ?? 'github.com/andybrudtkuhl') }}</a><br>
-                    <strong>Twitter:</strong> <a href="{{ $contact['twitter'] ?? 'https://twitter.com/andybrudtkuhl' }}">{{ str_replace('https://twitter.com/', '@', $contact['twitter'] ?? '@andybrudtkuhl') }}</a>
+                    <strong>Email:</strong> <a href="mailto:{{ $contact['email'] ?? 'hi@yoymetandy.com' }}">{{ $contact['email'] ?? 'hello@andybrudtkuhl.com' }}</a><br>
+                    <strong>GitHub:</strong> <a href="{{ $contact['github'] ?? 'https://github.com/abrudtkuhl' }}">{{ str_replace('https://', '', $contact['github'] ?? 'github.com/andybrudtkuhl') }}</a><br>
+                    <strong>Twitter:</strong> <a href="{{ $contact['twitter'] ?? 'https://twitter.com/abrudtkuhl' }}">{{ str_replace('https://twitter.com/', '@', $contact['twitter'] ?? '@andybrudtkuhl') }}</a>
                 </p>
             </td>
         </tr>
