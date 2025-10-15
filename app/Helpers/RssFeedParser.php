@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class RssFeedParser
 {
     private static $feeds = [
-        'brudtkuhl' => 'https://brudtkuhl.com/blog/feed.atom',
+        'blog' => 'https://brudtkuhl.com/blog/feed.atom',
         'medium' => 'https://medium.com/@abrudtkuhl/feed',
         'substack' => 'https://abrudtkuhl.substack.com/feed'
     ];
