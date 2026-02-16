@@ -4,328 +4,559 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $site['title'] ?? 'Andy Brudtkuhl\'s Homepage' }}</title>
+    <title>{{ $site['title'] ?? 'Andy Brudtkuhl\'s Homepage' }} - Issue #{{ date('Y') }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Courier+Prime:wght@400;700&display=swap');
+        
+        * { box-sizing: border-box; }
+        
         body {
-            font-family: "Times New Roman", Times, serif;
-            background-color: #FFFFFF;
-            background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
-            color: #000000;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+            color: #00ff00;
             margin: 0;
-            padding: 10px;
+            padding: 0;
+            line-height: 1.4;
         }
-        a:link { color: #0000FF; text-decoration: underline; }
-        a:visited { color: #800080; text-decoration: underline; }
-        a:hover { color: #FF0000; text-decoration: underline; }
-        a:active { color: #FF0000; text-decoration: underline; }
-        .blink { animation: blink 1s infinite; }
-        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-        .marquee { 
-            background-color: #FFFF00; 
-            color: #000000; 
-            padding: 3px; 
+        
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #0a0a1e;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+        }
+        
+        .magazine-header {
+            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+            padding: 3px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .magazine-header-inner {
+            background: #000;
+            padding: 25px;
+            border: 3px solid #fff;
+        }
+        
+        .masthead {
+            font-family: 'Press Start+2P', monospace;
+            font-size: 36px;
+            color: #00ffff;
+            text-align: center;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 30px #00ffff,
+                3px 3px 0 #ff00ff;
+            margin: 0 0 10px 0;
+            letter-spacing: 3px;
+        }
+        
+        .issue-info {
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: #ff00ff;
+            text-align: center;
+            margin: 10px 0 0 0;
+            letter-spacing: 2px;
+        }
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .pixel-border {
+            border: 4px solid;
+            border-image: repeating-linear-gradient(
+                45deg,
+                #00ffff 0px,
+                #00ffff 10px,
+                #ff00ff 10px,
+                #ff00ff 20px
+            ) 4;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+        
+        .tech-box {
+            background: #000;
+            border: 2px solid #00ff00;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 255, 0, 0.1),
+                0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .tech-box h3 {
+            font-family: 'Press Start+2P', monospace;
+            font-size: 12px;
+            color: #ffff00;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 8px;
+        }
+        
+        .ascii-art {
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            line-height: 1.2;
+            color: #00ffff;
+            white-space: pre;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .main-article {
+            grid-column: 2;
+            background: #000;
+            padding: 25px;
+            border: 3px double #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        h2 {
+            font-family: 'Press Start+2P', monospace;
+            font-size: 18px;
+            color: #ff00ff;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff00ff 0%, #00ffff 100%);
+        }
+        
+        .code-block {
+            background: #001a00;
+            border-left: 4px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            color: #00ff00;
+            overflow-x: auto;
+        }
+        
+        .line-numbers {
+            color: #006600;
+            margin-right: 15px;
+            user-select: none;
+        }
+        
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            text-shadow: 0 0 5px #00ffff;
+            transition: all 0.3s;
+        }
+        
+        a:hover {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        
+        .new-badge {
+            background: #ff0000;
+            color: #ffff00;
+            padding: 3px 8px;
+            font-family: 'Press Start+2P', monospace;
+            font-size: 8px;
+            margin-left: 10px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .blink {
+            animation: blink-animation 1s step-start infinite;
+        }
+        
+        @keyframes blink-animation {
+            50% { opacity: 0; }
+        }
+        
+        .sidebar-left, .sidebar-right {
+            font-size: 13px;
+        }
+        
+        .ad-box {
+            background: repeating-linear-gradient(
+                45deg,
+                #1a1a2e,
+                #1a1a2e 10px,
+                #16213e 10px,
+                #16213e 20px
+            );
+            border: 3px solid #ffff00;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .ad-box h4 {
+            color: #ffff00;
+            font-family: 'Press Start+2P', monospace;
+            font-size: 10px;
+            margin: 0 0 10px 0;
+        }
+        
+        .pixel-button {
+            display: inline-block;
+            background: #ff00ff;
+            color: #000;
+            padding: 10px 15px;
+            border: 3px solid #00ffff;
+            font-family: 'Press Start+2P', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 
+                4px 4px 0 #000,
+                0 0 10px rgba(255, 0, 255, 0.5);
+            transition: all 0.1s;
+        }
+        
+        .pixel-button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 
+                2px 2px 0 #000,
+                0 0 20px rgba(255, 0, 255, 0.8);
+        }
+        
+        .visitor-counter {
+            background: #000;
+            border: 2px solid #00ff00;
+            padding: 10px;
+            text-align: center;
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            color: #00ff00;
+            margin: 20px 0;
+            box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        
+        .tech-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .spec-item {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 8px;
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+        }
+        
+        .spec-label {
+            color: #ffff00;
             font-weight: bold;
+        }
+        
+        .footer {
+            background: #000;
+            border: 3px double #00ffff;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
             font-size: 12px;
         }
-        .construction { 
-            background-color: #FFA500; 
-            color: #000000; 
-            padding: 2px; 
-            font-weight: bold;
-            font-size: 11px;
+        
+        .nav-menu {
+            background: #000;
+            border: 3px solid #ff00ff;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .new { 
-            background-color: #FF0000; 
-            color: #FFFFFF; 
-            padding: 1px 3px; 
-            font-weight: bold;
+        
+        .nav-menu a {
+            font-family: 'Press Start+2P', monospace;
             font-size: 10px;
+            padding: 8px 12px;
+            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.1);
         }
-        .hot { 
-            background-color: #FF0000; 
-            color: #FFFF00; 
-            padding: 1px 3px; 
-            font-weight: bold;
-            font-size: 10px;
+        
+        @media (max-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+            .main-article {
+                grid-column: 1;
+            }
+            .masthead {
+                font-size: 24px;
+            }
         }
-        table { border-collapse: collapse; }
-        .bordered { border: 2px solid #000000; }
-        .inset { border: 2px inset #C0C0C0; }
-        .outset { border: 2px outset #C0C0C0; }
     </style>
 </head>
-<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<body>
+    <div class="scanlines"></div>
     
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#000080">
-        <tr>
-            <td align="center">
-                <div class="marquee">
-                    {{ $site['banner'] ?? '🚀 WELCOME TO ANDY\'S HOMEPAGE! 🚀 BEST VIEWED IN NETSCAPE NAVIGATOR! 🚀' }}
+    <div class="container">
+        <!-- Magazine Header -->
+        <div class="magazine-header">
+            <div class="magazine-header-inner">
+                <div class="ascii-art">╔═══════════════════════════════════════════════════════╗
+║                                                       ║
+║   ██╗  ██╗███████╗██╗     ██╗      ██████╗          ║
+║   ██║  ██║██╔════╝██║     ██║     ██╔═══██╗         ║
+║   ███████║█████╗  ██║     ██║     ██║   ██║         ║
+║   ██╔══██║██╔══╝  ██║     ██║     ██║   ██║         ║
+║   ██║  ██║███████╗███████╗███████╗╚██████╔╝         ║
+║   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝          ║
+║                                                       ║
+║   ██╗    ██╗ ██████╗ ██████╗ ██╗     ██████╗        ║
+║   ██║    ██║██╔═══██╗██╔══██╗██║     ██╔══██╗       ║
+║   ██║ █╗ ██║██║   ██║██████╔╝██║     ██║  ██║       ║
+║   ██║███╗██║██║   ██║██╔══██╗██║     ██║  ██║       ║
+║   ╚███╔███╔╝╚██████╔╝██║  ██║███████╗██████╔╝       ║
+║    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝        ║
+║                                                       ║
+╚═══════════════════════════════════════════════════════╝</div>
+                <h1 class="masthead">{{ strtoupper($site['title'] ?? 'BRUDTKUHL.COM') }}</h1>
+                <p class="issue-info">
+                    VOLUME {{ date('Y') }} • ISSUE #{{ date('n') }} • {{ strtoupper(date('M')) }} • <a href="https://donate.stripe.com/dR65ll80XeORasw9AL" style="color: #ff00ff; text-decoration: none;">$6.00 USD</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <a href="#about">[ ABOUT ]</a>
+            <a href="#projects">[ PROJECTS ]</a>
+            <a href="#writing">[ WRITING ]</a>
+            <a href="#contact">[ CONTACT ]</a>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid-layout">
+            <!-- Left Sidebar -->
+            <div class="sidebar-left">
+                <!-- Recent Activity -->
+                <div class="tech-box">
+                    <h3>RECENT ACTIVITY</h3>
+                    <div style="font-family: 'VT323', monospace; font-size: 13px; color: #00ff00;">
+                        @php
+                            $activities = [
+                                ['time' => '2h ago', 'action' => 'Pushed to', 'repo' => 'pmprompt'],
+                                ['time' => '5h ago', 'action' => 'Updated', 'repo' => 'sitespellchecker'],
+                                ['time' => '1d ago', 'action' => 'Deployed', 'repo' => 'tapback'],
+                                ['time' => '2d ago', 'action' => 'Pushed to', 'repo' => '48web'],
+                            ];
+                        @endphp
+                        @foreach($activities as $activity)
+                            <div style="margin-bottom: 12px; border-left: 2px solid #00ffff; padding-left: 8px;">
+                                <div style="color: #ffff00; font-size: 11px;">{{ $activity['time'] }}</div>
+                                <div style="color: #00ffff;">{{ $activity['action'] }}</div>
+                                <div style="color: #ff00ff; font-size: 12px;">{{ $activity['repo'] }}</div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-            </td>
-        </tr>
-    </table>
 
-    <br>
+                <!-- Quick Stats -->
+                <div class="ad-box">
+                    <h4>QUICK STATS</h4>
+                    <div style="color: #00ffff; font-family: 'VT323', monospace; font-size: 14px; text-align: left; padding: 10px 0;">
+                        <div style="margin-bottom: 8px;">
+                            <span style="color: #ffff00;">►</span> UPTIME: {{ now()->diffInYears(now()->subYears(rand(5, 15))) }}+ years
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <span style="color: #ffff00;">►</span> PROJECTS: {{ count($projects) ?? '∞' }}
+                        </div>
+                        <div>
+                            <span style="color: #ffff00;">►</span> COFFEE: <span class="blink">BREWING</span>
+                        </div>
+                    </div>
+                </div>
 
-    <table width="100%" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td align="center">
-                <h1 style="font-size: 32px; color: #000080; margin: 0 0 10px 0; font-weight: bold;">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" style="display: block;">
-                    {{ $site['title'] ?? 'Andy Brudtkuhl\'s Homepage' }}
-                </h1>
-                <p style="margin: 0; font-size: 14px; color: #666666;">
-                    <em>{{ $site['subtitle'] ?? 'Under Construction' }}</em> <span class="construction">🚧</span> | 
-                    <span class="new">NEW!</span> | 
-                    <span class="hot">HOT!</span>
-                </p>
-                <hr size="3" color="#000080" noshade>
-            </td>
-        </tr>
-    </table>
+                <!-- Visitor Counter -->
+                <div class="visitor-counter">
+                    <div style="font-size: 14px; color: #ffff00; margin-bottom: 5px;">VISITORS:</div>
+                    {{ str_pad($visitorCount, 8, '0', STR_PAD_LEFT) }}
+                </div>
+            </div>
 
-    <table width="100%" border="2" cellpadding="5" cellspacing="0" class="outset" bgcolor="#C0C0C0">
-        <tr>
-            <td align="center">
-                <strong>
-                    <a href="#about">🏠 About Me</a> | 
-                    <a href="#projects">💻 Projects</a> | 
-                    <a href="#writing">📝 Writing</a> | 
-                    <a href="#links">🔗 Links</a> | 
-                    <a href="#contact">📧 Contact</a>
-                </strong>
-            </td>
-        </tr>
-    </table>
-
-    <br>
-
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="inset" bgcolor="#F0F0F0">
-        <tr>
-            <td>
-                <h2 style="font-size: 18px; color: #000080; margin: 0 0 10px 0;">
-                    Welcome to my website!
-                </h2>
-                <p style="margin: 0 0 10px 0; line-height: 1.3; font-size: 14px;">
-                    <strong>Hi there!</strong> Welcome to my little corner of the World Wide Web! 🌐 
-                    I'm Andy Brudtkuhl, and I'm a web developer who loves creating cool stuff on the internet. 
-                    This site is where I share my projects, thoughts, and whatever else I'm working on.
-                </p>    
-                <p style="margin: 0 0 10px 0; line-height: 1.3; font-size: 14px;">
-                    Feel free to look around and check out what I've been up to. If you have any 
-                    questions or just want to say hi, don't hesitate to drop me a line!
-                </p>
-                <p style="margin: 0; font-size: 12px; color: #666666;">
-                    <em>Last updated: {{ $site['lastUpdated'] ?? date('F j, Y') }} | Best viewed at 800x600 resolution</em>
-                </p>
-            </td>
-        </tr>
-    </table>
-
-    <br>
-
-    <a name="about"></a>
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
-        <tr>
-            <td>
-                <h2 style="font-size: 16px; color: #000080; margin: 0 0 8px 0;">
+            <!-- Main Content -->
+            <div class="main-article">
+                <a name="about"></a>
+                <h2>⦿ ABOUT</h2>
                 
-                    About Me
-                </h2>
-                <hr size="1" color="#000080" noshade>
-                <table width="100%" border="0" cellpadding="5" cellspacing="0">
-                    <tr>
-                        <td width="80" valign="top">
-                            <img src="https://avatars.githubusercontent.com/u/322732?v=4" width="60" height="60" alt="My Photo" style="border: 2px solid #000000; background-color: #C0C0C0;">
-                        </td>
-                        <td valign="top">
-                            <p style="margin: 0 0 8px 0; line-height: 1.3; font-size: 13px;">
-                                {{ $about['description'] ?? 'I\'m a web developer who\'s been working with computers since the early days of the internet.' }}
-                            </p>
-                            <p style="margin: 0 0 8px 0; line-height: 1.3; font-size: 13px;">
-                                {{ $about['description2'] ?? 'These days I work with modern technologies like PHP, Laravel, and JavaScript.' }}
-                            </p>
-                            <p style="margin: 0; line-height: 1.3; font-size: 13px;">
-                                <strong>Skills:</strong> {{ implode(', ', $about['skills'] ?? ['HTML', 'CSS', 'JavaScript', 'PHP', 'Laravel', 'MySQL', 'Linux', 'Apache']) }}
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-
-    <br>
-
-    <a name="projects"></a>
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
-        <tr>
-            <td>
-                <h2 style="font-size: 16px; color: #000080; margin: 0 0 8px 0;">        
-                    My Projects 
-                    @if(!empty($projects) && count($projects) > 0)
-                        @foreach($projects as $project)
-                            @if(isset($project['badge']))
-                                <span class="{{ strtolower($project['badge']) == 'new!' ? 'new' : 'hot' }}">{{ $project['badge'] }}</span>
-                                @break
-                            @endif
-                        @endforeach
-                    @endif
-                </h2>
-                <hr size="1" color="#000080" noshade>
+                <p style="color: #00ffff; margin: 0 0 20px 0; font-size: 16px; line-height: 1.6;">
+                    {{ $about['description'] ?? 'Developer, builder, and internet tinkerer. I\'ve been making things on the web since the dial-up days.' }}
+                </p>
                 
-                <table width="100%" border="0" cellpadding="5" cellspacing="0">
-                    @foreach($projects as $index => $project)
-                        @if($index % 2 == 0)
-                            <tr>
+                <p style="color: #00ff00; margin: 0 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    {{ $about['description2'] ?? 'Currently working with modern web technologies while keeping one foot firmly planted in the retro aesthetic. Because why choose between progress and nostalgia?' }}
+                </p>
+
+                <div style="background: rgba(0, 255, 255, 0.1); border: 2px solid #00ffff; padding: 15px; margin: 20px 0;">
+                    <p style="margin: 0; color: #00ffff; font-family: 'VT323', monospace; font-size: 16px;">
+                        <strong style="color: #ffff00;">TECH STACK:</strong><br>
+                        {{ implode(' • ', $about['skills'] ?? ['PHP', 'Laravel', 'JavaScript', 'TypeScript', 'React', 'MySQL', 'Redis', 'Git']) }}
+                    </p>
+                </div>
+
+                <a name="projects"></a>
+                <h2>⦿ PROJECTS</h2>
+                
+                @foreach($projects as $project)
+                <div class="pixel-border" style="margin-bottom: 20px;">
+                    <h3 style="color: #ff00ff; font-family: 'Press Start+2P', monospace; font-size: 12px; margin: 0 0 15px 0;">
+                        {{ $project['emoji'] ?? '▶' }} {{ strtoupper($project['title'] ?? 'PROGRAM') }}
+                        @if(isset($project['badge']))
+                            <span class="new-badge">{{ $project['badge'] }}</span>
                         @endif
-                        <td width="50%" valign="top">
-                            <h3 style="font-size: 14px; color: #000080; margin: 0 0 5px 0;">
-                                {{ $project['emoji'] ?? '💻' }} {{ $project['title'] ?? 'Project' }}
-                            </h3>
-                            <p style="margin: 0 0 5px 0; line-height: 1.3; font-size: 12px;">
-                                {{ $project['description'] ?? 'Project description coming soon!' }}
-                            </p>
-                            <p style="margin: 0 0 10px 0; font-size: 12px;">
-                                <a href="{{ $project['links']['view'] ?? '#' }}">[View Project]</a>
-                                @if(isset($project['links']['blog']))
-                                    | <a href="{{ $project['links']['blog'] }}">[Blog]</a>
-                                @endif
-                            </p>
-                        </td>
-                        @if($index % 2 == 1 || $index == count($projects) - 1)
-                            </tr>
+                    </h3>
+                    <p style="color: #00ff00; margin: 0 0 15px 0; font-size: 14px; line-height: 1.5;">
+                        {{ $project['description'] ?? 'Building something interesting. Details coming soon.' }}
+                    </p>
+                    <div>
+                        <a href="{{ $project['links']['view'] ?? '#' }}" class="pixel-button">VIEW PROJECT</a>
+                        @if(isset($project['links']['blog']))
+                            <a href="{{ $project['links']['blog'] }}" class="pixel-button" style="background: #00ffff; margin-left: 10px;">READ MORE</a>
                         @endif
-                    @endforeach
-                </table>
-            </td>
-        </tr>
-    </table>
+                    </div>
+                </div>
+                @endforeach
 
-    <br>
-
-    <a name="writing"></a>
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
-        <tr>
-            <td>
-                <h2 style="font-size: 16px; color: #000080; margin: 0 0 8px 0;">
-                    My Writing 
-                    @if(!empty($writing) && count($writing) > 0)
-                        @foreach($writing as $article)
-                            @if(isset($article['badge']))
-                                <span class="{{ strtolower($article['badge']) == 'new!' ? 'new' : 'hot' }}">{{ $article['badge'] }}</span>
-                                @break
-                            @endif
-                        @endforeach
-                    @endif
-                </h2>
-                <hr size="1" color="#000080" noshade>
+                <a name="writing"></a>
+                <h2>⦿ WRITING</h2>
                 
-                <table width="100%" border="0" cellpadding="3" cellspacing="0">
-                    @foreach($writing as $article)
-                        <tr>
-                            <td width="100%" valign="top">
-                                <h3 style="font-size: 14px; color: #000080; margin: 0 0 3px 0;">
-                                    <a href="{{ $article['link'] ?? '#' }}">{{ $article['title'] ?? 'Article Title' }}</a>
-                                    @if(isset($article['badge']))
-                                        <span class="{{ strtolower($article['badge']) == 'new!' ? 'new' : 'hot' }}">{{ $article['badge'] }}</span>
-                                    @endif
-                                </h3>
-                                <p style="margin: 0 0 5px 0; line-height: 1.3; font-size: 12px;">
-                                    {{ $article['description'] ?? 'Article description coming soon!' }} 
-                                    <em>Published {{ $article['date'] ?? 'Recently' }}</em>
-                                    @if(isset($article['source']))
-                                        <span style="color: #666666; font-size: 11px;">[{{ ucfirst($article['source']) }}]</span>
-                                    @endif
-                                </p>
-                            </td>
-                        </tr>
-                    @endforeach
-                </table>
-            </td>
-        </tr>
-    </table>
+                @foreach($writing as $article)
+                <div style="border-left: 4px solid #ff00ff; padding-left: 15px; margin-bottom: 20px;">
+                    <h3 style="color: #00ffff; font-size: 16px; margin: 0 0 8px 0;">
+                        <a href="{{ $article['link'] ?? '#' }}">{{ $article['title'] ?? 'Article Title' }}</a>
+                        @if(isset($article['badge']))
+                            <span class="new-badge">{{ $article['badge'] }}</span>
+                        @endif
+                    </h3>
+                    <p style="color: #00ff00; margin: 0; font-size: 13px; line-height: 1.5;">
+                        {{ $article['description'] ?? 'Thoughts on code, design, and building things.' }}
+                    </p>
+                    <p style="color: #ffff00; margin: 5px 0 0 0; font-size: 12px;">
+                        <strong>DATE:</strong> {{ $article['date'] ?? 'Recently' }}
+                        @if(isset($article['source']))
+                            • <strong>SOURCE:</strong> {{ strtoupper($article['source']) }}
+                        @endif
+                    </p>
+                </div>
+                @endforeach
 
-    <br>
-
-    <a name="links"></a>
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
-        <tr>
-            <td>
-                <h2 style="font-size: 16px; color: #000080; margin: 0 0 8px 0;">
-                    Cool Links
-                </h2>
-                <hr size="1" color="#000080" noshade>
-                <p style="margin: 0 0 5px 0; font-size: 13px;">
-                    @foreach($links as $index => $link)
-                        <a href="{{ $link['url'] ?? '#' }}">{{ $link['name'] ?? 'Link' }}</a>@if($index < count($links) - 1) | @endif
-                    @endforeach
+                <a name="contact"></a>
+                <h2>⦿ CONTACT</h2>
+                
+                <p style="color: #00ffff; margin: 0 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    {{ $contact['message'] ?? 'Want to collaborate? Got a question? Feel free to reach out.' }}
                 </p>
-                <p style="margin: 0; font-size: 12px; color: #666666;">
-                    <em>More links coming soon!</em>
-                </p>
-            </td>
-        </tr>
-    </table>
+                
+                <div class="code-block">
+                    <div style="color: #00ff00;">
+                        <span style="color: #ffff00;">EMAIL:</span> <a href="mailto:{{ $contact['email'] ?? 'hi@youmetandy.com' }}">{{ $contact['email'] ?? 'hello@andybrudtkuhl.com' }}</a><br>
+                        <span style="color: #ffff00;">GITHUB:</span> <a href="{{ $contact['github'] ?? 'https://github.com/abrudtkuhl' }}">{{ str_replace('https://', '', $contact['github'] ?? 'github.com/abrudtkuhl') }}</a><br>
+                        <span style="color: #ffff00;">TWITTER:</span> <a href="{{ $contact['twitter'] ?? 'https://twitter.com/abrudtkuhl' }}">{{ str_replace('https://twitter.com/', '@', $contact['twitter'] ?? '@abrudtkuhl') }}</a>
+                    </div>
+                </div>
+            </div>
 
-    <br>
+            <!-- Right Sidebar -->
+            <div class="sidebar-right">
+                <a name="links"></a>
+                <div class="tech-box">
+                    <h3>ELSEWHERE</h3>
+                    <div style="font-size: 13px;">
+                        @foreach($links as $link)
+                            <p style="margin: 0 0 10px 0;">
+                                <span style="color: #ff00ff;">►</span> <a href="{{ $link['url'] ?? '#' }}">{{ $link['name'] ?? 'Link' }}</a>
+                            </p>
+                        @endforeach
+                    </div>
+                </div>
 
-    <a name="contact"></a>
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
-        <tr>
-            <td>
-                <h2 style="font-size: 16px; color: #000080; margin: 0 0 8px 0;">
-                    Contact Me
-                </h2>
-                <hr size="1" color="#000080" noshade>
-                <p style="margin: 0 0 8px 0; line-height: 1.3; font-size: 13px;">
-                    {{ $contact['message'] ?? 'I\'m always interested in new opportunities and exciting projects.' }}
-                </p>
-                <p style="margin: 0; line-height: 1.3; font-size: 13px;">
-                    <strong>Email:</strong> <a href="mailto:{{ $contact['email'] ?? 'hi@yoymetandy.com' }}">{{ $contact['email'] ?? 'hello@andybrudtkuhl.com' }}</a><br>
-                    <strong>GitHub:</strong> <a href="{{ $contact['github'] ?? 'https://github.com/abrudtkuhl' }}">{{ str_replace('https://', '', $contact['github'] ?? 'github.com/andybrudtkuhl') }}</a><br>
-                    <strong>Twitter:</strong> <a href="{{ $contact['twitter'] ?? 'https://twitter.com/abrudtkuhl' }}">{{ str_replace('https://twitter.com/', '@', $contact['twitter'] ?? '@andybrudtkuhl') }}</a>
-                </p>
-            </td>
-        </tr>
-    </table>
+                <!-- Now Playing / Currently -->
+                <div class="tech-box" style="border-color: #ff00ff;">
+                    <h3 style="color: #00ffff;">NOW</h3>
+                    <div style="font-family: 'VT323', monospace; font-size: 13px; color: #00ff00;">
+                        <div style="margin-bottom: 12px;">
+                            <div style="color: #ffff00; font-size: 11px; margin-bottom: 4px;">READING</div>
+                            <div style="color: #00ffff;">Mistborn series</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="color: #ffff00; font-size: 11px; margin-bottom: 4px;">LISTENING</div>
+                            <div style="color: #00ffff;">NOFX <span class="blink">♪</span></div>
+                        </div>
+                        <div>
+                            <div style="color: #ffff00; font-size: 11px; margin-bottom: 4px;">BUILDING</div>
+                            <div style="color: #00ffff;">pmprompt</div>
+                        </div>
+                    </div>
+                </div>
 
-    <br>
+            </div>
+        </div>
 
-    <table width="100%" border="2" cellpadding="10" cellspacing="0" class="outset" bgcolor="#FFFFFF">
-        <tr>
-            <td>
-                <script src="https://public.tapback.dev/widget.js"></script>
-                <div data-widget-id="a6131de6-6b7e-4ba7-8dfc-f9ee2516e6b0" data-source="andybrudtkuhl" data-api-base="https://tapback.dev/api"></div>
-            </td>
-        </tr>
-    </table>
+        <!-- Footer -->
+        <div class="footer">
+            <div class="ascii-art" style="font-size: 10px;">════════════════════════════════════════════════════════════</div>
+            <p style="margin: 15px 0; color: #00ff00;">
+                LAST MODIFIED: 2/15/2026 • SYSTEM TIME: {{ date('H:i') }} UTC
+            </p>
+            <p style="margin: 0; color: #00ffff; font-size: 11px;">
+                © {{ date('Y') }} ANDY BRUDTKUHL • BUILT WITH <a href="https://48web.com">48WEB</a> • 
+                <a href="#">[ ↑ TOP ]</a>
+            </p>
+        </div>
+    </div>
 
-    <br>
-
-    <table width="100%" border="2" cellpadding="8" cellspacing="0" class="inset" bgcolor="#C0C0C0">
-        <tr>
-            <td align="center">
-                <p style="margin: 0; font-size: 11px; color: #000000;">
-                    <em>Last updated: {{ $site['lastUpdated'] ?? date('F j, Y') }}</em> | Website by <a href="https://48web.com">48web</a>
-                    <a href="#">Back to Top</a>
-                </p>
-            </td>
-        </tr>
-    </table>
-
-    <table width="100%" border="0" cellpadding="3" cellspacing="0">
-        <tr>
-            <td align="center">
-                <p style="margin: 5px 0; font-size: 10px; color: #999999;">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" style="display: inline-block;">
-                    You are visitor number: <strong>{{ number_format($visitorCount) }}</strong><br>
-                    <em>Best viewed in Netscape Navigator 4.0 or higher</em>
-                </p>
-            </td>
-        </tr>
-    </table>
+    <!-- Tapback Widget - Full Width Below Footer -->
+    <div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+        <div class="tech-box" style="border-color: #00ff00;">
+            <h3 style="font-family: 'Press Start+2P', monospace; font-size: 12px; color: #ffff00; margin: 0 0 15px 0; text-transform: uppercase; border-bottom: 2px solid #00ff00; padding-bottom: 8px;">REACTIONS</h3>
+            <script src="https://public.tapback.dev/widget.js"></script>
+            <div data-widget-id="a6131de6-6b7e-4ba7-8dfc-f9ee2516e6b0" data-source="andybrudtkuhl" data-api-base="https://tapback.dev/api"></div>
+        </div>
+    </div>
 
 </body>
 </html>
