@@ -110,7 +110,7 @@
     <article class="page prose">
         <h1>Andy Brudtkuhl</h1>
 
-        <p class="intro">Hey Bound team - here's I've been up to and why I think the Director of Software Engineering role at Bound is a good fit.</p>
+        <p class="intro">Hey Bound team - here's what I've been up to and why I think the Director of Software Engineering role at Bound is a good fit.</p>
 
         <p>The short version: I think you nailed the problem in front of you. It's all scale, scaling the team, the infra, the software, the product, the devops. That's not a list of buzzwords to me. It's what I work on every single day.</p>
 
