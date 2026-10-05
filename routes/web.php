@@ -9,6 +9,6 @@ Route::get('/bike-proofreading-test', function () {
     return view('bike-proofreading-test');
 });
 
-Route::get('/bound', function () {
-    return view('bound');
+Route::get('/dropinadmin', function () {
+    return view('dropinadmin');
 });
