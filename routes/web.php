@@ -16,3 +16,7 @@ Route::get('/dropinadmin', function () {
 Route::get('/velir', function () {
     return view('velir');
 });
+
+Route::get('/domaine', function () {
+    return view('domaine');
+});
