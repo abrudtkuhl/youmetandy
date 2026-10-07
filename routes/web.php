@@ -12,3 +12,7 @@ Route::get('/bike-proofreading-test', function () {
 Route::get('/dropinadmin', function () {
     return view('dropinadmin');
 });
+
+Route::get('/velir', function () {
+    return view('velir');
+});
