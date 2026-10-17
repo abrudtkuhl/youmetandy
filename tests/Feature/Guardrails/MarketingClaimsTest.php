@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 function guardrailBannedClaimPatterns(): array
 {
     return [
-        'unsourced user count' => '/(?<![$\d,.])\b\d{1,3}(?:,\d{3})+\s*\+|(?<![$\d,.])\b\d+(?:\.\d+)?\s*[kK]\+|\b\d{1,3}(?:,\d{3})+\s+(?:users|customers|PMs|product managers|people|teams|businesses|companies|websites|subscribers|members)\b|(?<![$\d,.\-])\b\d{2,}\+?\s+(?:users|customers|clients|coaches|teams|people|businesses|companies|subscribers|members|product managers|PMs)\b|\b\d[\d,]*\+?\s+(?:happy|satisfied|active)\s+(?:users|customers)/',
+        'unsourced user count' => '/(?<![$\d,.])\b\d{1,3}(?:,\d{3})+\s*\+|(?<![$\d,.])\b\d+(?:\.\d+)?\s*[kK]\+|\b\d{1,3}(?:,\d{3})+\s+(?:users|customers|PMs|product managers|people|teams|businesses|companies|websites|subscribers|members|developers)\b|(?<![$\d,.\-])\b\d{2,}\+?\s+(?:users|customers|clients|coaches|teams|people|businesses|companies|subscribers|members|developers|product managers|PMs)\b|\b\d[\d,]*\+?\s+(?:happy|satisfied|active)\s+(?:users|customers)|(?<![$\d,.])\b\d+(?:\.\d+)?\s*(?:k|m|million|billion)\+?\s+(?:users|customers|clients|teams|people|businesses|companies|subscribers|members|developers|downloads|installs|product managers|PMs)\b/i',
         'unsourced accuracy or rate' => '/\b\d{2,3}(?:\.\d+)?\s*%\s*(?:accura|precis|uptime|satisf|success rate|delivery rate)/i',
         'template placeholder' => '/\[(?:MAILING ADDRESS|ADDRESS|COMPANY(?: NAME)?|PHONE(?: NUMBER)?|NAME|EMAIL|CITY|STATE|TBD|TODO|PLACEHOLDER|INSERT[A-Z ]*|YOUR [A-Z ]+)\]|lorem ipsum/i',
         'unverified clean-result claim' => '/didn\'t flag anything|no (?:other )?(?:issues|errors|typos) (?:on|across) (?:the rest|your (?:whole|entire) site)/i',
@@ -96,6 +96,41 @@ function guardrailClaimMatches(string $contents): array
     return $counts;
 }
 
+/**
+ * The text a file presents: JSON files are scanned as their decoded string values, one per line,
+ * because UpdateSiteContent writes them escaped (https:\/\/, \u2605) and SiteContent decodes them.
+ */
+function guardrailScannableText(string $path): string
+{
+    $contents = (string) file_get_contents($path);
+
+    if (! str_ends_with($path, '.json')) {
+        return $contents;
+    }
+
+    $strings = [];
+    $decoded = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+    $decoded = is_array($decoded) ? $decoded : [$decoded];
+    array_walk_recursive($decoded, function (mixed $value, int|string $key) use (&$strings): void {
+        $strings[] = is_string($key) ? $key : '';
+        $strings[] = is_scalar($value) ? (string) $value : '';
+    });
+
+    return implode("\n", array_filter($strings, fn (string $line): bool => $line !== ''));
+}
+
+it('scans JSON files as decoded text', function (): void {
+    $path = tempnam(sys_get_temp_dir(), 'claims').'.json';
+    file_put_contents($path, json_encode(['links' => ['https://example.test/'], 'badge' => '★★★★★', 'tagline' => 'Used by 500 TEAMS'], JSON_PRETTY_PRINT));
+
+    try {
+        expect((string) file_get_contents($path))->toContain('\\u2605')->toContain('https:\\/\\/')
+            ->and(guardrailClaimMatches(guardrailScannableText($path)))->toHaveKeys(['dev host in public copy', 'unsourced trust badge or rating', 'unsourced user count']);
+    } finally {
+        @unlink($path);
+    }
+});
+
 it('adds no unsourced claims, placeholders or dev hosts to views or public files', function (): void {
     $baseline = guardrailClaimsBaseline();
     $approved = guardrailApprovedClaims();
@@ -109,7 +144,7 @@ it('adds no unsourced claims, placeholders or dev hosts to views or public files
     foreach ($files as $file) {
         $relative = ltrim(str_replace([base_path(), '\\'], ['', '/'], $file->getPathname()), '/');
 
-        foreach (guardrailUnapprovedClaimMatches((string) file_get_contents($file->getPathname()), $approved[$relative] ?? []) as $name => $count) {
+        foreach (guardrailUnapprovedClaimMatches(guardrailScannableText($file->getPathname()), $approved[$relative] ?? []) as $name => $count) {
             if ($count > ($baseline[$relative][$name] ?? 0)) {
                 $offenders[] = "{$relative}: {$name} x{$count}";
             }
@@ -123,7 +158,7 @@ it('keeps every approved claim sourced and still present', function (): void {
     foreach (guardrailApprovedClaims() as $relative => $claims) {
         foreach ($claims as $text => $source) {
             expect(trim($source))->not->toBe('', "{$relative}: \"{$text}\" needs a source")
-                ->and(preg_match(guardrailApprovedClaimPattern($text), (string) file_get_contents(base_path($relative))))->toBe(1, "{$relative}: approved \"{$text}\" is no longer on the page; remove the approval");
+                ->and(preg_match(guardrailApprovedClaimPattern($text), guardrailScannableText(base_path($relative))))->toBe(1, "{$relative}: approved \"{$text}\" is no longer on the page; remove the approval");
         }
     }
 
@@ -150,6 +185,10 @@ it('catches the real past mistakes', function (string $copy, string $pattern): v
     'plain team count' => ['Used by 500 teams.', 'unsourced user count'],
     'plain user count' => ['Used by 1000 users.', 'unsourced user count'],
     'plain count with plus' => ['Loved by 1000+ users.', 'unsourced user count'],
+    'capitalised users' => ['Loved by 1000+ Users.', 'unsourced user count'],
+    'upper-case teams' => ['Used by 500 TEAMS.', 'unsourced user count'],
+    'developers without comma' => ['Used by 1000+ developers', 'unsourced user count'],
+    'million magnitude' => ['Used by 10 million users.', 'unsourced user count'],
     'team count with plus' => ['Used by 500+ teams.', 'unsourced user count'],
     'pmprompt old count' => ['Join 6,000+ PMs getting the best AI content every week', 'unsourced user count'],
     'SSC accuracy' => ['<h3>99% Accuracy</h3>', 'unsourced accuracy or rate'],
