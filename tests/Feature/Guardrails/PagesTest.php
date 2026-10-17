@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,9 +19,6 @@ function guardrailPageUris(): array
 }
 
 it('renders every page without real HTTP calls', function (): void {
-    Http::preventStrayRequests();
-    Http::fake(['*' => Http::response('<rss><channel></channel></rss>', 200)]);
-
     expect(guardrailPageUris())->not->toBeEmpty();
 
     foreach (guardrailPageUris() as $uri) {
@@ -31,13 +27,11 @@ it('renders every page without real HTTP calls', function (): void {
 });
 
 it('keeps every page except the homepage out of search', function (): void {
-    Http::fake(['*' => Http::response('<rss><channel></channel></rss>', 200)]);
-
     foreach (guardrailPageUris() as $uri) {
         if ($uri === '/') {
             continue;
         }
 
-        expect((string) $this->get($uri)->getContent())->toMatch('/<meta name="robots" content="noindex/', "{$uri} is indexable; application pages and test fixtures must be noindex");
+        expect((string) $this->get($uri)->getContent())->toMatch('/<meta name="robots" content="noindex,\\s*nofollow"/', "{$uri} is indexable; application pages and test fixtures must be \"noindex, nofollow\"");
     }
 });

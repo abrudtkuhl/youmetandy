@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 function guardrailBannedClaimPatterns(): array
 {
     return [
-        'unsourced user count' => '/(?<![$\d,.])\b\d{1,3}(?:,\d{3})+\s*\+|(?<![$\d,.])\b\d+(?:\.\d+)?\s*[kK]\+|\b\d{1,3}(?:,\d{3})+\s+(?:users|customers|PMs|product managers|people|teams|businesses|companies|websites|subscribers|members)\b|(?<![$\d,.\-])\b\d{2,}\s+(?:users|customers|clients|coaches|teams|people|businesses|companies|subscribers|members|product managers|PMs)\b|\b\d[\d,]*\+?\s+(?:happy|satisfied|active)\s+(?:users|customers)/',
+        'unsourced user count' => '/(?<![$\d,.])\b\d{1,3}(?:,\d{3})+\s*\+|(?<![$\d,.])\b\d+(?:\.\d+)?\s*[kK]\+|\b\d{1,3}(?:,\d{3})+\s+(?:users|customers|PMs|product managers|people|teams|businesses|companies|websites|subscribers|members)\b|(?<![$\d,.\-])\b\d{2,}\+?\s+(?:users|customers|clients|coaches|teams|people|businesses|companies|subscribers|members|product managers|PMs)\b|\b\d[\d,]*\+?\s+(?:happy|satisfied|active)\s+(?:users|customers)/',
         'unsourced accuracy or rate' => '/\b\d{2,3}(?:\.\d+)?\s*%\s*(?:accura|precis|uptime|satisf|success rate|delivery rate)/i',
         'template placeholder' => '/\[(?:MAILING ADDRESS|ADDRESS|COMPANY(?: NAME)?|PHONE(?: NUMBER)?|NAME|EMAIL|CITY|STATE|TBD|TODO|PLACEHOLDER|INSERT[A-Z ]*|YOUR [A-Z ]+)\]|lorem ipsum/i',
         'unverified clean-result claim' => '/didn\'t flag anything|no (?:other )?(?:issues|errors|typos) (?:on|across) (?:the rest|your (?:whole|entire) site)/i',
@@ -131,6 +131,8 @@ it('catches the real past mistakes', function (string $copy, string $pattern): v
     'pmprompt user count' => ['Used by 5,000+ product managers.', 'unsourced user count'],
     'plain team count' => ['Used by 500 teams.', 'unsourced user count'],
     'plain user count' => ['Used by 1000 users.', 'unsourced user count'],
+    'plain count with plus' => ['Loved by 1000+ users.', 'unsourced user count'],
+    'team count with plus' => ['Used by 500+ teams.', 'unsourced user count'],
     'pmprompt old count' => ['Join 6,000+ PMs getting the best AI content every week', 'unsourced user count'],
     'SSC accuracy' => ['<h3>99% Accuracy</h3>', 'unsourced accuracy or rate'],
     'pmprompt #109 accuracy' => ['Provides 24/7 market monitoring with 90% accuracy', 'unsourced accuracy or rate'],
