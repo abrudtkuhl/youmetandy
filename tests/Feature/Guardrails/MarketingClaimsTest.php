@@ -21,6 +21,8 @@ function guardrailBannedClaimPatterns(): array
         'unsourced conversation-analysis claim' => '/\banaly[sz](?:ing|ed|is of)\s+(?:over\s+|more than\s+)?\d[\d,.]*\s*[kK]?\+?\s+(?:ChatGPT\s+|AI\s+|LLM\s+)?(?:conversations|chats|prompts|sessions)\b|\b\d[\d,.]*\s*[kK]?\+?\s+ChatGPT\s+conversations\b/i',
         'unsourced outcome percentage' => '/\b\d{1,3}(?:\.\d+)?\s*%\s+(?:improved|increased|faster|more|less|fewer|reduction|reduced|higher|lower|better|growth|boost|cheaper)\b|\b(?:improved|increased|reduced|boosted|grew|cut)\b[^.<\n]{0,30}\b\d{1,3}\s*%/i',
         'unsourced trust badge or rating' => '/Reviewed by [^<\n]{0,40}\bTeam\b|\b(?:expert|vet|doctor)[- ](?:reviewed|approved|verified)\b|(?:★){3,}|\b\d(?:\.\d)?\s*(?:\/\s*5|out of 5)\s*stars?\b|\btrusted by\b/i',
+        // youmetandy "Built and maintained 100+ web applications" (cut 2026-10-17). "20+ years" stays (Andy's call).
+        'unsourced project count' => '/\b\d[\d,]*\+\s+(?:web\s+)?(?:applications|apps|websites|sites|projects|clients|products|integrations)\b/i',
         'dev host in public copy' => '/https?:\/\/[a-z0-9.-]+\.(?:test|local)\b|https?:\/\/(?:localhost|127\.0\.0\.1)\b/i',
     ];
 }
@@ -156,6 +158,8 @@ it('catches the real past mistakes', function (string $copy, string $pattern): v
     'conversations, unformatted count' => ['Based on 10000 ChatGPT conversations', 'unsourced conversation-analysis claim'],
     'conversations, k count' => ['We analyzed 10k+ AI conversations', 'unsourced conversation-analysis claim'],
     'mailing address placeholder' => ['<p>[MAILING ADDRESS]</p>', 'template placeholder'],
+    'youmetandy project count' => ['Built and maintained 100+ web applications, websites, SaaS products', 'unsourced project count'],
+    'client count' => ['Trusted partner to 50+ clients', 'unsourced project count'],
     'SSC #109 variant D' => ["A quick look at the rest of example.com didn't flag anything obvious.", 'unverified clean-result claim'],
     'fake testimonial block' => ['<div class="rounded testimonial-card">"Changed my life" - Jane D.</div>', 'testimonial markup'],
     'agencies case study' => ['<li>Outcome: 40% improved project margin</li>', 'unsourced outcome percentage'],
@@ -173,4 +177,6 @@ it('does not flag ordinary copy', function (string $copy): void {
     'form number' => ['IRS Form 2553 and 1,040 instructions'],
     'salary range' => ['$180,000 - $300,000+'],
     'deal size' => ['Close 5 enterprise deals ($100K+ ARR each)'],
+    'experience in years (kept by Andy)' => ['20+ years of experience building web applications'],
+    'plain project count' => ['I shipped 3 projects this year'],
 ]);

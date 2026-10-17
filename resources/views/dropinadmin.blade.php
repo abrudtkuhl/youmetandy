@@ -123,7 +123,6 @@
             <p class="role-meta">2007–Present</p>
             <p>Build and operate SaaS products and develop custom software for clients, with a focus on Laravel/PHP applications, APIs, integrations, and web-based products.</p>
             <ul>
-                <li>Built and maintained 100+ web applications, websites, SaaS products, and custom integrations.</li>
                 <li>Design and build Laravel applications from initial architecture through production deployment.</li>
                 <li>Develop REST APIs, third-party integrations, background jobs/queues, payment systems, and internal tooling.</li>
                 <li>Maintain and modernize existing applications, troubleshoot production issues, and improve performance and reliability.</li>

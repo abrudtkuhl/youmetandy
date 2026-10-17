@@ -45,16 +45,6 @@ class SiteContent
         return data_get($data, $key, $default);
     }
 
-    public static function getVisitorCount()
-    {
-        return VisitorCounter::get();
-    }
-
-    public static function incrementVisitorCount()
-    {
-        return VisitorCounter::increment();
-    }
-
     public static function getWriting($limit = 10)
     {
         return RssFeedParser::getWriting($limit);

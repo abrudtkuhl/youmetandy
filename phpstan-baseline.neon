@@ -13,12 +13,6 @@ parameters:
 			path: app/Console/Commands/UpdateSiteContent.php
 
 		-
-			message: '#^Method App\\Console\\Commands\\VisitorCounterCommand\:\:handle\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Console/Commands/VisitorCounterCommand.php
-
-		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 2
@@ -151,12 +145,6 @@ parameters:
 			path: app/Helpers/SiteContent.php
 
 		-
-			message: '#^Method App\\Helpers\\SiteContent\:\:getVisitorCount\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/SiteContent.php
-
-		-
 			message: '#^Method App\\Helpers\\SiteContent\:\:getWriting\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -165,12 +153,6 @@ parameters:
 		-
 			message: '#^Method App\\Helpers\\SiteContent\:\:getWriting\(\) has parameter \$limit with no type specified\.$#'
 			identifier: missingType.parameter
-			count: 1
-			path: app/Helpers/SiteContent.php
-
-		-
-			message: '#^Method App\\Helpers\\SiteContent\:\:incrementVisitorCount\(\) has no return type specified\.$#'
-			identifier: missingType.return
 			count: 1
 			path: app/Helpers/SiteContent.php
 
@@ -191,72 +173,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: app/Helpers/SiteContent.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:get\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:getFromRedis\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:getFromSession\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:increment\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:reset\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:saveToRedis\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:saveToRedis\(\) has parameter \$count with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:saveToSession\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Method App\\Helpers\\VisitorCounter\:\:saveToSession\(\) has parameter \$count with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Property App\\Helpers\\VisitorCounter\:\:\$redisKey has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Helpers/VisitorCounter.php
-
-		-
-			message: '#^Property App\\Helpers\\VisitorCounter\:\:\$sessionKey has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Helpers/VisitorCounter.php
 
 		-
 			message: '#^Method App\\Http\\Controllers\\HomeController\:\:index\(\) has no return type specified\.$#'

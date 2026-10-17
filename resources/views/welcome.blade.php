@@ -1045,17 +1045,6 @@
 
         .fake-webpage a:hover { color: #ffdd00; }
 
-        .fake-webpage .hit-counter {
-            font-family: 'Courier New', monospace;
-            background: #000000;
-            border: 2px inset #336633;
-            color: #00ff00;
-            padding: 3px 10px;
-            letter-spacing: 5px;
-            font-size: 16px;
-            display: inline-block;
-        }
-
         .fake-webpage .awards-grid {
             display: flex;
             gap: 6px;
@@ -1241,16 +1230,6 @@
 
         .xp-button.primary:hover {
             background: linear-gradient(180deg, #4a8adc 0%, #2a5ab3 100%);
-        }
-
-        .visitor-counter {
-            font-size: 11px;
-            color: #666;
-            text-align: center;
-            margin-top: 12px;
-            padding: 8px;
-            background: #f0ede4;
-            border-radius: 4px;
         }
 
         .window.maximized {
@@ -1688,10 +1667,6 @@
                             [ <a href="#">Next &#x276F;</a> ]
                         </div>
 
-                        <div style="text-align:center; margin-top: 10px;">
-                            <p class="body-text" style="text-align:center">You are visitor number:</p>
-                            <div class="hit-counter">{{ str_pad($visitorCount ?? 1337, 6, '0', STR_PAD_LEFT) }}</div>
-                        </div>
                     </div>
                     <div class="page-footer">
                         &copy; {{ date('Y') }} {{ $site['title'] ?? 'Andy Brudtkuhl' }} &nbsp;|&nbsp;

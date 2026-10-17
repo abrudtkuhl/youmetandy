@@ -27,7 +27,6 @@ php artisan site:update projects
 - `title`: Main site title
 - `subtitle`: Subtitle (e.g., "Under Construction")
 - `lastUpdated`: Last update date
-- `visitorCount`: Visitor counter number
 - `banner`: Animated banner text
 
 ### About Section
@@ -90,11 +89,6 @@ Add this to the `writing` array:
   "link": "https://example.com/article",
   "badge": "HOT!"
 }
-```
-
-### Update Visitor Count
-```bash
-php artisan site:update site visitorCount 1338
 ```
 
 ## Tips

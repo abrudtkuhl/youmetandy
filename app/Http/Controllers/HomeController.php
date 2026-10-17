@@ -14,8 +14,7 @@ class HomeController extends Controller
         $writing = SiteContent::getWriting(10); // Dynamic RSS feeds
         $links = SiteContent::get('links', []);
         $contact = SiteContent::get('contact', []);
-        $visitorCount = SiteContent::incrementVisitorCount();
 
-        return view('welcome', compact('site', 'about', 'projects', 'writing', 'links', 'contact', 'visitorCount'));
+        return view('welcome', compact('site', 'about', 'projects', 'writing', 'links', 'contact'));
     }
 }
