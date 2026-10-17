@@ -34,7 +34,6 @@ return [
             'driver' => 'sync',
         ],
 
-
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => env('BEANSTALKD_QUEUE_HOST', 'localhost'),

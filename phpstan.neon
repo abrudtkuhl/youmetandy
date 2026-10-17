@@ -1,0 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+# Level 8 (null safety) is the strictest level that stays practical with Laravel's mixed-returning
+# helpers. Existing errors live in phpstan-baseline.neon; new code must be clean. Shrink the
+# baseline when you touch a file, and never regenerate it to hide a new error.
+parameters:
+    level: 8
+    paths:
+        - app
+        - config
+        - routes
+    tmpDir: storage/framework/cache/phpstan

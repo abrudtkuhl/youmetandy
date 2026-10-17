@@ -5,8 +5,9 @@ namespace App\Helpers;
 class VisitorCounter
 {
     private static $redisKey = 'visitor_count';
+
     private static $sessionKey = 'visitor_count';
-    
+
     public static function increment()
     {
         $count = self::getFromRedis();
@@ -16,30 +17,30 @@ class VisitorCounter
                 $count = 1337;
             }
         }
-        
+
         $newCount = $count + 1;
-        
+
         self::saveToRedis($newCount);
         self::saveToSession($newCount);
-        
+
         return $newCount;
     }
-    
+
     public static function get()
     {
         $count = self::getFromRedis();
         if ($count !== null) {
             return $count;
         }
-        
+
         $count = self::getFromSession();
         if ($count !== null) {
             return $count;
         }
-        
+
         return rand(1337, 9999);
     }
-    
+
     private static function getFromRedis()
     {
         try {
@@ -48,9 +49,10 @@ class VisitorCounter
             }
         } catch (\Exception $e) {
         }
+
         return null;
     }
-    
+
     private static function saveToRedis($count)
     {
         try {
@@ -60,7 +62,7 @@ class VisitorCounter
         } catch (\Exception $e) {
         }
     }
-    
+
     private static function getFromSession()
     {
         try {
@@ -69,9 +71,10 @@ class VisitorCounter
             }
         } catch (\Exception $e) {
         }
+
         return null;
     }
-    
+
     private static function saveToSession($count)
     {
         try {
@@ -79,7 +82,7 @@ class VisitorCounter
         } catch (\Exception $e) {
         }
     }
-    
+
     public static function reset()
     {
         try {
@@ -88,12 +91,12 @@ class VisitorCounter
             }
         } catch (\Exception $e) {
         }
-        
+
         try {
             session()->forget(self::$sessionKey);
         } catch (\Exception $e) {
         }
-        
+
         return self::increment();
     }
 }
