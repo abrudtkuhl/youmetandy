@@ -20,7 +20,7 @@ function guardrailBannedClaimPatterns(): array
         'testimonial markup' => '/class="[^"]*\btestimonial|<x-testimonial|@include\([\'"][^\'"]*testimonial|<blockquote\b[^>]*>\s*["“]/i',
         'unsourced conversation-analysis claim' => '/\banaly[sz](?:ing|ed|is of)\s+(?:over\s+|more than\s+)?\d[\d,.]*\s*[kK]?\+?\s+(?:ChatGPT\s+|AI\s+|LLM\s+)?(?:conversations|chats|prompts|sessions)\b|\b\d[\d,.]*\s*[kK]?\+?\s+ChatGPT\s+conversations\b/i',
         'unsourced outcome percentage' => '/\b\d{1,3}(?:\.\d+)?\s*%\s+(?:improved|increased|faster|more|less|fewer|reduction|reduced|higher|lower|better|growth|boost|cheaper)\b|\b(?:improved|increased|reduced|boosted|grew|cut)\b[^.<\n]{0,30}\b\d{1,3}\s*%/i',
-        'unsourced trust badge or rating' => '/Reviewed by [^<\n]{0,40}\bTeam\b|\b(?:expert|vet|doctor)[- ](?:reviewed|approved|verified)\b|★{3,}|\b\d(?:\.\d)?\s*(?:\/\s*5|out of 5)\s*stars?\b|\btrusted by\b/i',
+        'unsourced trust badge or rating' => '/Reviewed by [^<\n]{0,40}\bTeam\b|\b(?:expert|vet|doctor)[- ](?:reviewed|approved|verified)\b|(?:★){3,}|\b\d(?:\.\d)?\s*(?:\/\s*5|out of 5)\s*stars?\b|\btrusted by\b/i',
         'dev host in public copy' => '/https?:\/\/[a-z0-9.-]+\.(?:test|local)\b|https?:\/\/(?:localhost|127\.0\.0\.1)\b/i',
     ];
 }
@@ -59,10 +59,23 @@ function guardrailUnapprovedClaimMatches(string $contents, array $approved): arr
             throw new LogicException("Approved claim \"{$text}\" has no source.");
         }
 
-        $contents = str_replace($text, '', $contents);
+        $contents = preg_replace(guardrailApprovedClaimPattern($text), '', $contents) ?? throw new LogicException("Could not match approved claim \"{$text}\".");
     }
 
     return guardrailClaimMatches($contents);
+}
+
+/**
+ * Matches approved text only as a whole: an approved "100 users" must not also excuse "1100 users"
+ * or "1,100 users". Boundaries apply only where the text starts or ends with a letter or digit,
+ * so approvals that start or end with HTML still work.
+ */
+function guardrailApprovedClaimPattern(string $text): string
+{
+    $start = preg_match('/^\w/u', $text) ? '(?<![\w])(?<!\d[,.])' : '';
+    $end = preg_match('/\w$/u', $text) ? '(?![\w])(?![,.]\d)' : '';
+
+    return '/'.$start.preg_quote($text, '/').$end.'/';
 }
 
 /** @return array<string, int> pattern name => count */
@@ -108,7 +121,7 @@ it('keeps every approved claim sourced and still present', function (): void {
     foreach (guardrailApprovedClaims() as $relative => $claims) {
         foreach ($claims as $text => $source) {
             expect(trim($source))->not->toBe('', "{$relative}: \"{$text}\" needs a source")
-                ->and((string) file_get_contents(base_path($relative)))->toContain($text);
+                ->and(preg_match(guardrailApprovedClaimPattern($text), (string) file_get_contents(base_path($relative))))->toBe(1, "{$relative}: approved \"{$text}\" is no longer on the page; remove the approval");
         }
     }
 
@@ -122,7 +135,10 @@ it('lets approved copy pass while unapproved copy still fails', function (): voi
     expect(guardrailClaimMatches($copy))->toBe(['unsourced accuracy or rate' => 2])
         ->and(guardrailUnapprovedClaimMatches($copy, $approved))->toBe(['unsourced accuracy or rate' => 1])
         ->and(guardrailUnapprovedClaimMatches('<h3>99% Accuracy</h3>', $approved))->toBe([])
-        ->and(fn () => guardrailUnapprovedClaimMatches('99% accuracy', ['99% accuracy' => ' ']))->toThrow(LogicException::class);
+        ->and(fn () => guardrailUnapprovedClaimMatches('99% accuracy', ['99% accuracy' => ' ']))->toThrow(LogicException::class)
+        ->and(guardrailUnapprovedClaimMatches('Join 100 users.', ['100 users' => 'Andy approved']))->toBe([])
+        ->and(guardrailUnapprovedClaimMatches('Join 1100 users.', ['100 users' => 'Andy approved']))->toBe(['unsourced user count' => 1])
+        ->and(guardrailUnapprovedClaimMatches('Join 1,100 users.', ['100 users' => 'Andy approved']))->toBe(['unsourced user count' => 1]);
 });
 
 it('catches the real past mistakes', function (string $copy, string $pattern): void {
@@ -144,6 +160,7 @@ it('catches the real past mistakes', function (string $copy, string $pattern): v
     'fake testimonial block' => ['<div class="rounded testimonial-card">"Changed my life" - Jane D.</div>', 'testimonial markup'],
     'agencies case study' => ['<li>Outcome: 40% improved project margin</li>', 'unsourced outcome percentage'],
     'generic review badge' => ['<span>Reviewed by Spider Plant Care Team</span>', 'unsourced trust badge or rating'],
+    'star rating badge' => ['<span>★★★★★</span>', 'unsourced trust badge or rating'],
     'quoted testimonial' => ["<blockquote class=\"italic\">\n    \"This partnership transformed how we deliver.\"", 'testimonial markup'],
     'SSC #11 robots.txt' => ['Sitemap: https://sitespellchecker.test/sitemap.xml', 'dev host in public copy'],
 ]);
