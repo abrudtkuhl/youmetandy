@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Helpers\SiteContent;
 
 class HomeController extends Controller
@@ -15,8 +14,7 @@ class HomeController extends Controller
         $writing = SiteContent::getWriting(10); // Dynamic RSS feeds
         $links = SiteContent::get('links', []);
         $contact = SiteContent::get('contact', []);
-        $visitorCount = SiteContent::incrementVisitorCount();
 
-        return view('welcome', compact('site', 'about', 'projects', 'writing', 'links', 'contact', 'visitorCount'));
+        return view('welcome', compact('site', 'about', 'projects', 'writing', 'links', 'contact'));
     }
 }

@@ -11,7 +11,7 @@ class RssFeedParser
     private static $feeds = [
         'blog' => 'https://brudtkuhl.com/blog/feed.atom',
         'medium' => 'https://medium.com/@abrudtkuhl/feed',
-        'substack' => 'https://abrudtkuhl.substack.com/feed'
+        'substack' => 'https://abrudtkuhl.substack.com/feed',
     ];
 
     public static function getWriting($limit = 10)
@@ -25,7 +25,7 @@ class RssFeedParser
                     $allArticles = array_merge($allArticles, $articles);
                 } catch (\Exception $e) {
                     // Log error but continue with other feeds
-                    Log::warning("Failed to parse RSS feed {$url}: " . $e->getMessage());
+                    Log::warning("Failed to parse RSS feed {$url}: ".$e->getMessage());
                 }
             }
 
@@ -41,8 +41,8 @@ class RssFeedParser
     private static function parseFeed($url, $source)
     {
         $response = Http::timeout(10)->get($url);
-        
-        if (!$response->successful()) {
+
+        if (! $response->successful()) {
             throw new \Exception("Failed to fetch RSS feed: HTTP {$response->status()}");
         }
 
@@ -50,7 +50,7 @@ class RssFeedParser
         $data = simplexml_load_string($xml);
 
         if ($data === false) {
-            throw new \Exception("Failed to parse XML");
+            throw new \Exception('Failed to parse XML');
         }
 
         $articles = [];
@@ -84,7 +84,7 @@ class RssFeedParser
             'date' => self::formatDate($date),
             'link' => $link,
             'source' => $source,
-            'badge' => self::getBadge($date)
+            'badge' => self::getBadge($date),
         ];
     }
 
@@ -101,7 +101,7 @@ class RssFeedParser
             'date' => self::formatDate($date),
             'link' => $link,
             'source' => $source,
-            'badge' => self::getBadge($date)
+            'badge' => self::getBadge($date),
         ];
     }
 
@@ -109,14 +109,14 @@ class RssFeedParser
     {
         // Try different description fields
         $description = (string) ($item->summary ?? $item->description ?? $item->content);
-        
+
         // Clean up HTML and limit length
         $description = strip_tags($description);
         $description = html_entity_decode($description, ENT_QUOTES, 'UTF-8');
-        
+
         // Limit to 200 characters
         if (strlen($description) > 200) {
-            $description = substr($description, 0, 197) . '...';
+            $description = substr($description, 0, 197).'...';
         }
 
         return $description ?: 'No description available';
@@ -126,6 +126,7 @@ class RssFeedParser
     {
         try {
             $date = new \DateTime($dateString);
+
             return $date->format('F j, Y');
         } catch (\Exception $e) {
             return 'Recently';
@@ -136,7 +137,7 @@ class RssFeedParser
     {
         try {
             $date = new \DateTime($dateString);
-            $now = new \DateTime();
+            $now = new \DateTime;
             $diff = $now->diff($date);
 
             if ($diff->days <= 7) {

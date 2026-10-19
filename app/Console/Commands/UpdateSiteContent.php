@@ -7,14 +7,16 @@ use Illuminate\Console\Command;
 class UpdateSiteContent extends Command
 {
     protected $signature = 'site:update {section} {--key=} {--value=}';
+
     protected $description = 'Update site content JSON file';
 
     public function handle()
     {
         $jsonPath = storage_path('app/public/data/site-content.json');
-        
-        if (!file_exists($jsonPath)) {
+
+        if (! file_exists($jsonPath)) {
             $this->error('Site content file not found!');
+
             return 1;
         }
 
